@@ -1,0 +1,43 @@
+Installing vault on Ubuntu:
+Add PGP for the package signing key.
+sudo apt update && sudo apt install gpg
+
+Add the HashiCorp GPG key.
+wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg >/dev/null
+
+Verify the key's fingerprint.
+gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
+Note: The fingerprint must match E8A0 32E0 94D8 EB4E A189 D270 DA41 8C88 A321 9F7B, which can also be verified at https://www.hashicorp.com/security under "Linux Package Checksum Verification".
+
+Add the official HashiCorp Linux repository.
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+Update and install vault.
+sudo apt update && sudo apt install vault
+
+Verifying the Installation.
+vault
+
+
+Starting the vault Server on dev mode
+vault server -dev
+
+With the dev server started, perform the following:
+
+Launch a new terminal session.
+
+Copy and run the export VAULT_ADDR ... command from the terminal output. This will configure the Vault client to talk to the dev server.
+
+$ export VAULT_ADDR='http://127.0.0.1:8200'
+
+Vault CLI determines which Vault servers to send requests using the VAULT_ADDR environment variable.
+
+Save the unseal key somewhere. Don't worry about how to save this securely. For now, just save it anywhere.
+
+Set the VAULT_TOKEN environment variable value to the generated Root Token value displayed in the terminal output.
+
+example export VAULT_TOKEN="s.XmpNPoi9sRhYtdKHaQhkHP6x"
+
+Verify the Server is Running
+
+vault status
